@@ -1,0 +1,29 @@
+# Environment & Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+
+# Database
+*.db
+
+# Uploaded files
+data/financial_document_*.pdf
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Celery
+celerybeat-schedule
+
+# Outputs
+outputs/
