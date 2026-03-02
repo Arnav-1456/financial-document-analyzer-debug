@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Document Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Financial Document Analyzer</h1>
+            <p>AI-powered insights for financial reports, earnings calls, and statements.</p>
+        </header>
+
+        <main>
+            <div class="card upload-section">
+                <form id="uploadForm">
+                    
+                    <div class="file-drop-area" id="dropZone">
+                        <input type="file" id="fileInput" name="file" accept=".pdf" required>
+                        <div class="drop-text">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p>Drag & drop your PDF document here</p>
+                            <span>or click to browse</span>
+                        </div>
+                        <p id="fileNameDisplay" class="file-name-display"></p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="queryInput">Specific Question (Optional)</label>
+                        <input type="text" id="queryInput" name="query" placeholder="e.g. What are the key risk factors mentioned in this report?">
+                    </div>
+
+                    <button type="submit" id="submitBtn">
+                        <span>Analyze Document</span>
+                    </button>
+                    
+                </form>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="hidden">
+                <div class="spinner"></div>
+                <div class="loading-text">
+                    <h3>Analyzing Financial Data...</h3>
+                    <p>Our AI agents are currently reading the document and extracting key metrics.</p>
+                </div>
+            </div>
+
+            <!-- Results State -->
+            <div id="resultsContainer" class="card hidden">
+                <div class="results-header">
+                    <h2>Analysis Report</h2>
+                    <span class="badge success" id="statusBadge">Success</span>
+                </div>
+                <div id="resultsContent" class="markdown-body">
+                    <!-- HTML output goes here -->
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingState = document.getElementById('loadingState');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const resultsContent = document.getElementById('resultsContent');
+
+        // Handle File Selection display
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = "Selected file: " + this.files[0].name;
+                dropZone.classList.add('has-file');
+            } else {
+                fileNameDisplay.textContent = "";
+                dropZone.classList.remove('has-file');
+            }
+        });
+
+        // Handle Drag & Drop styles
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                fileNameDisplay.textContent = "Selected file: " + fileInput.files[0].name;
+                dropZone.classList.add('has-file');
+            }
+        });
+
+        // Handle Form Submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("Please select a valid PDF file.");
+                return;
+            }
+
+            const formData = new FormData(form);
+            
+            // Switch UI to loading
+            submitBtn.disabled = true;
+            loadingState.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+            
+            // Scroll to loader
+            loadingState.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                // Send standard synchronous request
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success! Render markdown
+                    resultsContent.innerHTML = marked.parse(data.analysis);
+                    resultsContainer.classList.remove('hidden');
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // Application error
+                    alert("Error: " + (data.detail || "Failed to analyze document."));
+                }
+                
+            } catch (err) {
+                console.error(err);
+                alert("A network error occurred while analyzing the document.");
+            } finally {
+                // Return UI to normal
+                submitBtn.disabled = false;
+                loadingState.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

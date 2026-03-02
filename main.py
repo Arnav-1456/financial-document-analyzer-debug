@@ -1,4 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import os
 import uuid
 import asyncio
@@ -20,6 +22,9 @@ from database import (
 
 app = FastAPI(title="Financial Document Analyzer")
 
+# Mount static directory for frontend
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 def run_crew(query: str, file_path: str = "data/sample.pdf"):
     """Run the full financial analysis crew on the given document."""
@@ -36,8 +41,8 @@ def run_crew(query: str, file_path: str = "data/sample.pdf"):
 
 @app.get("/")
 async def root():
-    """Health check endpoint"""
-    return {"message": "Financial Document Analyzer API is running"}
+    """Serve the frontend UI"""
+    return FileResponse("static/index.html")
 
 
 @app.post("/analyze")

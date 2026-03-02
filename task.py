@@ -6,7 +6,7 @@ from tools import search_tool, read_data_tool
 
 ## Creating a task to help solve user's query
 analyze_financial_document_task = Task(
-    description="Analyze the financial document thoroughly to answer the user's query: {query}\n\
+    description="Analyze the financial document at '{file_path}' thoroughly to answer the user's query: {query}\n\
 Read the document using the provided tool and extract key financial metrics including revenue, \
 net income, operating margins, cash flow, debt levels, and any other relevant data points.\n\
 Provide a structured, data-driven analysis that directly addresses the user's question.\n\
@@ -27,7 +27,7 @@ Support all claims with specific numbers and page references from the document."
 
 ## Creating an investment analysis task
 investment_analysis = Task(
-    description="Based on the financial analysis, provide well-reasoned investment recommendations.\n\
+    description="Based on the financial analysis from the document at '{file_path}', provide well-reasoned investment recommendations.\n\
 Consider the financial health indicators, growth trajectory, competitive positioning, \
 and current market conditions relevant to the company.\n\
 User's specific query: {query}\n\
@@ -49,7 +49,7 @@ Ensure all recommendations comply with standard investment advisory practices.",
 
 ## Creating a risk assessment task
 risk_assessment = Task(
-    description="Conduct a thorough risk assessment based on the financial document.\n\
+    description="Conduct a thorough risk assessment based on the financial document at '{file_path}'.\n\
 Identify and categorize all material risks: market risk, credit risk, operational risk, \
 liquidity risk, regulatory risk, and any company-specific risks.\n\
 User's query context: {query}\n\
@@ -71,7 +71,7 @@ Propose specific, practical risk mitigation strategies for each identified risk.
 
 ## Creating a document verification task
 verification = Task(
-    description="Verify that the uploaded document is a legitimate financial document.\n\
+    description="Verify that the uploaded document at '{file_path}' is a legitimate financial document.\n\
 Check for the presence of standard financial report elements: income statement, \
 balance sheet, cash flow statement, management discussion, notes to financial statements.\n\
 Identify the company name, reporting period, document type (10-K, 10-Q, annual report, etc.), \

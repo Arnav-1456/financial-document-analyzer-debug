@@ -1,14 +1,15 @@
 ## Importing libraries and files
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from crewai import Agent
-
 from tools import search_tool, read_data_tool
 
-### Loading LLM
-llm = "gemini/gemini-2.0-flash"
+### Loading LLM (Reduced Model Version)
+llm = "gemini/gemini-2.5-flash"
+
 
 # Creating an Experienced Financial Analyst agent
 financial_analyst = Agent(
@@ -26,16 +27,19 @@ financial_analyst = Agent(
     ),
     tools=[read_data_tool, search_tool],
     llm=llm,
-    max_iter=15,
+    max_iter=3,
     max_rpm=10,
     allow_delegation=True
 )
 
+
 # Creating a document verifier agent
 verifier = Agent(
     role="Financial Document Verifier",
-    goal="Verify that uploaded documents are legitimate financial documents and extract key metadata "
-         "such as company name, reporting period, document type, and filing date.",
+    goal=(
+        "Verify that uploaded documents are legitimate financial documents and extract key metadata "
+        "such as company name, reporting period, document type, and filing date."
+    ),
     verbose=True,
     memory=True,
     backstory=(
@@ -47,16 +51,19 @@ verifier = Agent(
     ),
     tools=[read_data_tool],
     llm=llm,
-    max_iter=15,
+    max_iter=3,
     max_rpm=10,
     allow_delegation=False
 )
 
 
+# Creating an Investment Advisor agent
 investment_advisor = Agent(
     role="Certified Investment Advisor",
-    goal="Provide well-reasoned, compliant investment recommendations based on financial analysis "
-         "of the document and current market conditions.",
+    goal=(
+        "Provide well-reasoned, compliant investment recommendations based on financial analysis "
+        "of the document and current market conditions."
+    ),
     verbose=True,
     memory=True,
     backstory=(
@@ -68,16 +75,19 @@ investment_advisor = Agent(
     ),
     tools=[read_data_tool, search_tool],
     llm=llm,
-    max_iter=15,
+    max_iter=3,
     max_rpm=10,
     allow_delegation=False
 )
 
 
+# Creating a Risk Assessment agent
 risk_assessor = Agent(
     role="Financial Risk Assessment Specialist",
-    goal="Identify, quantify, and communicate financial risks found in the document, "
-         "and recommend appropriate risk mitigation strategies.",
+    goal=(
+        "Identify, quantify, and communicate financial risks found in the document, "
+        "and recommend appropriate risk mitigation strategies."
+    ),
     verbose=True,
     memory=True,
     backstory=(
@@ -89,7 +99,7 @@ risk_assessor = Agent(
     ),
     tools=[read_data_tool, search_tool],
     llm=llm,
-    max_iter=15,
+    max_iter=3,
     max_rpm=10,
     allow_delegation=False
 )

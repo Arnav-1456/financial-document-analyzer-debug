@@ -12,11 +12,11 @@ search_tool = SerperDevTool()
 
 ## Creating custom pdf reader tool using @tool decorator
 @tool("read_financial_document")
-def read_data_tool(file_path: str = 'data/sample.pdf') -> str:
+def read_data_tool(file_path: str ) -> str:
     """Tool to read data from a PDF financial document.
 
     Args:
-        file_path (str, optional): Path of the pdf file. Defaults to 'data/sample.pdf'.
+        file_path (str): Path of the pdf file to read.
 
     Returns:
         str: Full Financial Document content
