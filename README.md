@@ -54,7 +54,7 @@ All 4 agents and 4 tasks had intentionally terrible prompts that encouraged fabr
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.10, 3.11, or 3.12 (CrewAI has known issues with 3.13+)
 - API keys for [Google AI Studio](https://aistudio.google.com/apikey) (or OpenAI) and [Serper](https://serper.dev)
 
 ### 1. Install Dependencies
@@ -81,8 +81,10 @@ SERPER_API_KEY=your_serper_api_key_here
 
 ### 3. Run the Server
 
+To ensure the server runs with your virtual environment and auto-reloads on changes, use the following `uvicorn` command:
+
 ```bash
-python main.py
+.\venv\Scripts\python.exe -m uvicorn main:app --reload
 ```
 
 Server starts at `http://localhost:8000`. Navigate to this URL in your web browser to use the beautiful drag-and-drop User Interface!
