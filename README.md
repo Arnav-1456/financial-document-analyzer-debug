@@ -8,6 +8,7 @@ A comprehensive financial document analysis system that processes corporate repo
 - **Multi-Agent Pipeline** — 4 specialized agents (Verifier → Analyst → Advisor → Risk Assessor) work sequentially
 - **Investment Recommendations** — Evidence-based, compliance-aware investment guidance
 - **Risk Assessment** — Structured risk analysis with mitigation strategies
+- **Web Interface** — Beautiful, dark-mode frontend UI with drag-and-drop PDF uploads and Markdown rendering
 - **Async Processing** — Queue-based processing via Celery + Redis for concurrent requests
 - **Result Storage** — SQLite database stores all analysis results and user queries
 - **REST API** — FastAPI-powered endpoints for integration
@@ -84,7 +85,7 @@ SERPER_API_KEY=your_serper_api_key_here
 python main.py
 ```
 
-Server starts at `http://localhost:8000`.
+Server starts at `http://localhost:8000`. Navigate to this URL in your web browser to use the beautiful drag-and-drop User Interface!
 
 ### 4. (Optional) Start Celery Worker for Async Processing
 
@@ -193,6 +194,9 @@ financial-document-analyzer-debug/
 ├── worker.py            # Celery worker for async queue processing
 ├── requirements.txt     # Python dependencies
 ├── .env.example         # Environment variable template
+├── static/              # Web Frontend UI
+│   ├── index.html       # Drag-and-drop web interface
+│   └── style.css        # Premium dark-mode styling
 ├── data/                # PDF upload directory
 │   └── TSLA-Q2-2025-Update.pdf
 └── outputs/             # Analysis output directory
