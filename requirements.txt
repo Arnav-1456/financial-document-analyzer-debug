@@ -595,10 +595,7 @@ pytz==2026.1.post1
     # via mem0ai
 pyvis==0.3.2
     # via crewai
-pywin32==311
-    # via
-    #   docker
-    #   portalocker
+
 pyyaml==6.0.3
     # via
     #   chromadb
